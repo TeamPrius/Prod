@@ -1,0 +1,22 @@
+terraform init
+
+terraform apply
+
+
+and go to console...u will see the instance name there
+and instance state will be running
+
+apply complete is shown
+
+
+make change in ec2
+change the ami
+
+ami-08d70e59c07c61a3a
+
+then 
+terraform apply
+
+
+say yes
+

@@ -1,0 +1,16 @@
+ C:\Users\15872\OneDrive\Documents\CyberConnexion\TerraformTutorial
+
+has es2 and main
+
+
+--------------------------
+
+Mojdeh shared these links:
+
+https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table
+
+https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
+
+Terraform tutorials I found:
+https://developer.hashicorp.com/tutorials/library?query=secure%20&product=terraform
+
