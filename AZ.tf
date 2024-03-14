@@ -90,9 +90,14 @@ nat_gateway_id = aws_nat_gateway.nat.id
 }
 
 
-#Create Private Route Table for Private Subnet 2 
+#Create Private Route Table for Private Subnet 2
 resource "aws_route_table" "pvtroute2" {
   vpc_id = aws_vpc.prod_vpc.id
+
+route {
+cidr_block = "0.0.0.0/0"
+nat_gateway_id = aws_nat_gateway.nat.id
+}
 
 
   tags = {
@@ -150,7 +155,7 @@ vpc = true
 
 
 
-#Create Security Group
+#Create Security Group for Web Server
 resource "aws_security_group" "appsg" {
   name        = "app_sg"
   description = "Allow inbound HTTP traffic"
@@ -177,6 +182,65 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1" # semantically equivalent to all ports
 }
+
+
+
+
+###########################
+########### RDS ###########
+###########################
+
+# RDS Subnet Group
+resource "aws_db_subnet_group" "private2" {
+  name        = "mysql-rds-private-subnet-2"
+  description = "RDS instance in Private subnet 2"
+  subnet_ids = aws_subnet.private2.id
+}
+
+
+# Create security group for RDS
+resource "aws_security_group" "rds_sg" {
+  name        = "Security Group for RDS"
+  description = "Allow inbound/outbound MySQL traffic"
+  vpc_id      = aws_vpc.prod_vpc.id
+  depends_on  = [aws_vpc.prod_vpc]
+}
+
+# Allow inbound MySQL connections
+resource "aws_security_group_rule" "allow_mysql_in" {
+  description              = "Allow inbound MySQL connections"
+  type                     = "ingress"
+  from_port                = "3306"
+  to_port                  = "3306"
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.default.id
+  security_group_id        = aws_security_group.rds_sg.id
+}
+
+# RDS Instance
+resource "aws_db_instance" "mysql_8" {
+  allocated_storage = 10         # Storage for instance in gigabytes
+  db_name = "mydb"
+ engine = "mysql"
+engine_version = "5.7"
+ instance_class = "db.t3.micro"
+manage_master_user_password   = true
+ master_user_secret_kms_key_id = aws_kms_key.prod_vpc_kms.key_id
+username = "foo"
+ multi_az = true
+vpc_security_group_ids = [
+    aws_security_group.rds_sg.id
+  ]
+}
+
+######################### KMS #########################
+resource "aws_kms_key" "prod_vpc_kms" {
+  description = "Prod VPC KMS Key"
+}
+
+
+
+
 
 # Define default Network ACL 
 
@@ -206,17 +270,20 @@ resource "aws_network_acl" nacl1" {
   }
 }
 
+#Define EC2 Instance for Presentation Layer with auto-scaling enabled  ########### Need TO DO
 
 
-#Define EC2 Instance for Presentation Layer
 
 
-resource "aws_instance" "web_tier" {
+#Define EC2 Instance for Business Logic Layer 
+
+
+resource "aws_instance" "logic_layer" {
   ami           = "ami-0e731c8a588258d0d"
   instance_type = "t2.micro"
 
 
-  subnet_id              = aws_subnet.public1.id
+  subnet_id              = aws_subnet.pvtroute1.id
   availability_zone      = "us-east-1a"
   vpc_security_group_ids = [aws_security_group.appsg.id]
 
@@ -244,7 +311,8 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
 
 
 
-#Define EC2 Instance for Business Logic Layer with auto-scaling enabled
+
+
 
 
 
