@@ -218,19 +218,18 @@ resource "aws_security_group_rule" "allow_mysql_in" {
 }
 
 # RDS Instance
-resource "aws_db_instance" "mysql_8" {
-  allocated_storage = 10         # Storage for instance in gigabytes
+resource "aws_db_instance" "rds_instance" {
+  allocated_storage = 20        # Storage for instance in gigabytes
   db_name = "mydb"
  engine = "mysql"
 engine_version = "5.7"
  instance_class = "db.t3.micro"
 manage_master_user_password   = true
+publicly_accessible    = false
  master_user_secret_kms_key_id = aws_kms_key.prod_vpc_kms.key_id
 username = "foo"
  multi_az = true
-vpc_security_group_ids = [
-    aws_security_group.rds_sg.id
-  ]
+vpc_security_group_ids = [aws_security_group.rds_sg.id]
 }
 
 ######################### KMS #########################
@@ -270,7 +269,45 @@ resource "aws_network_acl" nacl1" {
   }
 }
 
-#Define EC2 Instance for Presentation Layer with auto-scaling enabled  ########### Need TO DO
+
+## Create Application Load Balancer
+resource "aws_lb" "app_lb" {
+  name               = "Application Load Balancer"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.appsg.id]
+  subnets            = [aws_subnet.public1.id]
+  enable_deletion_protection = true
+
+tags = {
+    Environment = "production"
+  }
+
+
+
+# Define listener
+  listener {
+    port            = 80
+    protocol        = "HTTP"
+    default_action {
+      type             = "forward"
+      target_group_arn = aws_lb_target_group.app_target_group.arn
+    }
+  }
+}
+
+
+# Create target group for web servers
+resource "aws_lb_target_group" "app_target_group" {
+  name     = "app-target-group"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.prod_vpc.id
+
+ 
+}
+
+
 
 
 
@@ -278,18 +315,20 @@ resource "aws_network_acl" nacl1" {
 #Define EC2 Instance for Business Logic Layer 
 
 
-resource "aws_instance" "logic_layer" {
+resource "aws_launch_configuration" "web_lc" {
+  name = "Web Server"
   ami           = "ami-0e731c8a588258d0d"
   instance_type = "t2.micro"
+  security_groups             = [aws_security_group.appsg.id]
 
 
-  subnet_id              = aws_subnet.pvtroute1.id
+  subnet_id              = aws_subnet.private1.id
   availability_zone      = "us-east-1a"
-  vpc_security_group_ids = [aws_security_group.appsg.id]
+ 
 
 
 
-  user_data = file("userdata.sh")
+user_data = file("userdata.sh")
 
   tags = {
     Name = "App Server"
@@ -298,14 +337,14 @@ resource "aws_instance" "logic_layer" {
 }
 
 
-# Create auto-scaling group
-resource "aws_autoscaling_group" "auto_scaling_group" {
-  name                 = "prod_vpc_asg"
-  launch_configuration = aws_launch_configuration.auto_scaling_group.id
+# Create auto-scaling group for web servers
+resource "aws_autoscaling_group" "web_asg" {
+  name                 = "Auto Scaling Group Web Server"
+  launch_configuration = aws_launch_configuration.web_lc.id
   min_size             = 1
   max_size             = 5
   desired_capacity     = 2
-  vpc_zone_identifier  = [aws_subnet.pvtroute1.id]
+  vpc_zone_identifier  = [aws_subnet.private1.id]
 }
 
 
