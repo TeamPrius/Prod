@@ -62,7 +62,7 @@ resource "aws_subnet" "private_subnet_2" {
 # create public subnet 2 for Jump Tier
 
 resource "aws_subnet" "public_subnet_2" {
-  vpc_id                  = "aws_vpc.prod_vpc.id"  # get vpc id
+  vpc_id                  = aws_vpc.prod_vpc.id  # get vpc id
   cidr_block              = "10.0.4.0/24"          # cidr block of public subnet 2
   availability_zone       = "us-east-1b"           # availability zone of public subnet 2
   map_public_ip_on_launch = true
