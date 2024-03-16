@@ -78,10 +78,10 @@ resource "aws_route_table" "publicroute1" {
 resource "aws_route_table" "pvtroute1" {
   vpc_id = aws_vpc.prod_vpc.id
 
-route {
-cidr_block = "0.0.0.0/0"
-nat_gateway_id = aws_nat_gateway.nat.id
-}
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat.id
+  }
 
 
   tags = {
@@ -94,10 +94,10 @@ nat_gateway_id = aws_nat_gateway.nat.id
 resource "aws_route_table" "pvtroute2" {
   vpc_id = aws_vpc.prod_vpc.id
 
-route {
-cidr_block = "0.0.0.0/0"
-nat_gateway_id = aws_nat_gateway.nat.id
-}
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat.id
+  }
 
 
   tags = {
@@ -112,7 +112,7 @@ nat_gateway_id = aws_nat_gateway.nat.id
 
 
 resource "aws_route_table_association" "publicrta1" {
-  subnet_id      = aws_subnet.publicroute1.id
+  subnet_id      = aws_subnet.public1.id
   route_table_id = aws_route_table.publicroute1.id
 }
 
@@ -121,7 +121,7 @@ resource "aws_route_table_association" "publicrta1" {
 
 
 resource "aws_route_table_association" "pvtrta1" {
-  subnet_id      = aws_subnet.pvtroute1.id
+  subnet_id      = aws_subnet.private1.id
   route_table_id = aws_route_table.pvtroute1.id
 }
 
@@ -129,7 +129,7 @@ resource "aws_route_table_association" "pvtrta1" {
 
 
 resource "aws_route_table_association" "pvtrta2" {
-  subnet_id      = aws_subnet.pvtroute2.id
+  subnet_id      = aws_subnet.private2.id
   route_table_id = aws_route_table.pvtroute2.id
 }
 
@@ -137,18 +137,18 @@ resource "aws_route_table_association" "pvtrta2" {
 
 #Create NAT Gateway
 resource "aws_nat_gateway" "nat" {
-allocation_id = aws_eip.nat.id
-subnet_id = aws_subnet.public1.id
+  allocation_id = aws_eip.nat.id
+  subnet_id     = aws_subnet.public1.id
 
-tags = {
-Name = "gw NAT"
+  tags = {
+    Name = "gw NAT"
+  }
 }
-
 
 
 #Allocate Elastic IP for NAT Gateway
 resource "aws_eip" "nat" {
-vpc = true
+  vpc = true
 }
 
 
@@ -194,7 +194,7 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
 resource "aws_db_subnet_group" "private2" {
   name        = "mysql-rds-private-subnet-2"
   description = "RDS instance in Private subnet 2"
-  subnet_ids = aws_subnet.private2.id
+  subnet_ids  = [aws_subnet.private2.id]
 }
 
 
@@ -213,23 +213,23 @@ resource "aws_security_group_rule" "allow_mysql_in" {
   from_port                = "3306"
   to_port                  = "3306"
   protocol                 = "tcp"
-  source_security_group_id = aws_security_group.default.id
+  cidr_blocks       = ["10.0.2.0/24", "10.0.5.0/24"]
   security_group_id        = aws_security_group.rds_sg.id
 }
 
 # RDS Instance
 resource "aws_db_instance" "rds_instance" {
-  allocated_storage = 20        # Storage for instance in gigabytes
-  db_name = "mydb"
- engine = "mysql"
-engine_version = "5.7"
- instance_class = "db.t3.micro"
-manage_master_user_password   = true
-publicly_accessible    = false
- master_user_secret_kms_key_id = aws_kms_key.prod_vpc_kms.key_id
-username = "foo"
- multi_az = true
-vpc_security_group_ids = [aws_security_group.rds_sg.id]
+  allocated_storage             = 20 # Storage for instance in gigabytes
+  db_name                       = "mydb"
+  engine                        = "mysql"
+  engine_version                = "5.7"
+  instance_class                = "db.t3.micro"
+  manage_master_user_password   = true
+  publicly_accessible           = false
+  master_user_secret_kms_key_id = aws_kms_key.prod_vpc_kms.key_id
+  username                      = "foo"
+  multi_az                      = true
+  vpc_security_group_ids        = [aws_security_group.rds_sg.id]
 }
 
 ######################### KMS #########################
@@ -243,7 +243,7 @@ resource "aws_kms_key" "prod_vpc_kms" {
 
 # Define default Network ACL 
 
-resource "aws_network_acl" nacl1" {
+resource "aws_network_acl" "nacl1" {
   vpc_id = aws_vpc.prod_vpc.id
 
   egress {
@@ -272,28 +272,29 @@ resource "aws_network_acl" nacl1" {
 
 ## Create Application Load Balancer
 resource "aws_lb" "app_lb" {
-  name               = "Application Load Balancer"
-  internal           = false
-  load_balancer_type = "application"
-  security_groups    = [aws_security_group.appsg.id]
-  subnets            = [aws_subnet.public1.id]
+  name                       = "Application-Load-Balancer"
+  internal                   = false
+  load_balancer_type         = "application"
+  security_groups            = [aws_security_group.appsg.id]
+  subnets                    = [aws_subnet.public1.id]
   enable_deletion_protection = true
 
-tags = {
+  tags = {
     Environment = "production"
   }
 
 
 
-# Define listener
-  listener {
-    port            = 80
-    protocol        = "HTTP"
-    default_action {
-      type             = "forward"
-      target_group_arn = aws_lb_target_group.app_target_group.arn
-    }
-  }
+  # Define listener
+ # listener {
+  #  port     = 80
+   # protocol = "HTTP"
+    
+#default_action {
+ #     type             = "forward"
+  #    target_group_arn = aws_lb_target_group.app_target_group.arn
+   # }
+ 
 }
 
 
@@ -304,7 +305,7 @@ resource "aws_lb_target_group" "app_target_group" {
   protocol = "HTTP"
   vpc_id   = aws_vpc.prod_vpc.id
 
- 
+
 }
 
 
@@ -316,24 +317,21 @@ resource "aws_lb_target_group" "app_target_group" {
 
 
 resource "aws_launch_configuration" "web_lc" {
-  name = "Web Server"
-  ami           = "ami-0e731c8a588258d0d"
-  instance_type = "t2.micro"
-  security_groups             = [aws_security_group.appsg.id]
+  name            = "Web Server"
+  image_id             = "ami-0e731c8a588258d0d"
+  instance_type   = "t2.micro"
+  security_groups = [aws_security_group.appsg.id]
 
 
-  subnet_id              = aws_subnet.private1.id
-  availability_zone      = "us-east-1a"
- 
+  #subnet_id         = aws_subnet.private1.id
+  #availability_zone = "us-east-1a"
 
 
 
-user_data = file("userdata.sh")
 
-  tags = {
-    Name = "App Server"
-  }
+  user_data = file("userdata.sh")
 
+  
 }
 
 
