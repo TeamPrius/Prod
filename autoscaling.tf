@@ -1,4 +1,4 @@
-# create autoscaling group
+# create autoscaling group for both availability zones
 
 #  autoscaling group
 resource "aws_autoscaling_group" "autoscaling_group_availability_zone_2" {
@@ -15,7 +15,7 @@ resource "aws_autoscaling_group" "autoscaling_group_availability_zone_2" {
 }
 
 
-# launch template
+# launch template or launch configuration
 resource "aws_launch_template" "launch_template_availability_zone_2" {
   name          = "launch-template-availability-zone-2"
   image_id      = data.aws_ami.amazonlinux2023.id 
