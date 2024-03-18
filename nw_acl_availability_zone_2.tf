@@ -15,7 +15,7 @@ resource "aws_network_acl" "presentation_network_acl_availability_zone_2" {
     to_port    = 80
   }
 
-  # outoing rules
+  # outgoing rules
   egress {
     protocol   = "tcp"
     rule_no    = 200
