@@ -9,7 +9,7 @@
 #Create Security Group for Web Server
 resource "aws_security_group" "appsg" {
   name        = "app_sg"
-  description = "Allow inbound HTTP traffic"
+  description = "Security Group for the jump server"
   vpc_id      = aws_vpc.prod_vpc.id
 
   tags = {
@@ -18,12 +18,12 @@ resource "aws_security_group" "appsg" {
 }
 
 #Inbound rule
-resource "aws_vpc_security_group_ingress_rule" "allow_http" {
+resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
   security_group_id = aws_security_group.appsg.id
-  cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 80
+  cidr_ipv4         = "0.0.0.0/0" #Replace your IP address here 
+  from_port         = 22
   ip_protocol       = "tcp"
-  to_port           = 80
+  to_port           = 22
 }
 
 
@@ -56,9 +56,9 @@ resource "aws_security_group" "presentation_layer_sg_availability_zone_2" {
 # allow http access from internet
 resource "aws_vpc_security_group_ingress_rule" "presentation_layer_ingr_availability_zone_2" {
   security_group_id = aws_security_group.presentation_layer_sg_availability_zone_2.id
-  cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 80  
-  to_port           = 80
+  cidr_ipv4         = "0.0.0.0/0" #Replace your IP address here 
+  from_port         = 22  
+  to_port           = 22
   ip_protocol       = "tcp"
 }
 
@@ -71,7 +71,7 @@ resource "aws_vpc_security_group_egress_rule" "presentation_layer_egr_availabili
 }
 ###########################################################################################
 
-# Note that Availability Zone 1 repeates the presentation layer security group
+# Note that Availability Zone 1 repeats the presentation layer security group
 
 
 # security group for Business Logic Layer
@@ -91,9 +91,9 @@ resource "aws_security_group" "business_logic_layer_sg_availability_zone_2" {
 # allow http access from internet
 resource "aws_vpc_security_group_ingress_rule" "business_logic_layer_ingr_availability_zone_2" {
   security_group_id = aws_security_group.business_logic_layer_sg_availability_zone_2.id
-  cidr_ipv4         = "0.0.0.0/0"
-  from_port = 80  
-  to_port = 80
+  cidr_ipv4         = "0.0.0.0/0" #Replace my IP address
+  from_port = 22
+  to_port = 22
   ip_protocol = "tcp"
 }
 
