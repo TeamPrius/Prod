@@ -48,7 +48,7 @@ resource "aws_instance" "jump_tier_availability_zone_2" {
 resource "aws_instance" "business_logic_tier_availability_zone_1" {
   ami                         = data.aws_ami.amazonlinux2023.id                                        # ami
   instance_type               = "t2.micro"                                                             # ami instance type
-  subnet_id                   = aws_subnet.private_subnet_1.id                                         # get public subnet id
+  subnet_id                   = aws_subnet.private_subnet_1.id                                         # get subnet id
   availability_zone           = "us-east-1a"                                                           # get availability zone
   associate_public_ip_address = true                                                                   # gives public ip address
   vpc_security_group_ids      = [aws_security_group.appsg.id]    # get security group id
