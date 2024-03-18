@@ -20,10 +20,10 @@ resource "aws_security_group" "appsg" {
 #Inbound rule
 resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
   security_group_id = aws_security_group.appsg.id
-  cidr_ipv4         = "0.0.0.0/0" #Replace your IP address here 
-  from_port         = 22
+  cidr_ipv4         = "0.0.0.0/0" 
+  from_port         = 80
   ip_protocol       = "tcp"
-  to_port           = 22
+  to_port           = 80
 }
 
 
@@ -56,9 +56,9 @@ resource "aws_security_group" "presentation_layer_sg_availability_zone_2" {
 # allow http access from internet
 resource "aws_vpc_security_group_ingress_rule" "presentation_layer_ingr_availability_zone_2" {
   security_group_id = aws_security_group.presentation_layer_sg_availability_zone_2.id
-  cidr_ipv4         = "0.0.0.0/0" #Replace your IP address here 
-  from_port         = 22  
-  to_port           = 22
+  cidr_ipv4         = "0.0.0.0/0" 
+  from_port         = 80
+  to_port           = 80
   ip_protocol       = "tcp"
 }
 
@@ -91,9 +91,9 @@ resource "aws_security_group" "business_logic_layer_sg_availability_zone_2" {
 # allow http access from internet
 resource "aws_vpc_security_group_ingress_rule" "business_logic_layer_ingr_availability_zone_2" {
   security_group_id = aws_security_group.business_logic_layer_sg_availability_zone_2.id
-  cidr_ipv4         = "0.0.0.0/0" #Replace my IP address
-  from_port = 22
-  to_port = 22
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port = 80
+  to_port = 80
   ip_protocol = "tcp"
 }
 
