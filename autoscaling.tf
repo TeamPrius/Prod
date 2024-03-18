@@ -32,7 +32,7 @@ resource "aws_launch_template" "launch_template_availability_zone_2" {
 
   network_interfaces {
     associate_public_ip_address = false
-    subnet_id                   = aws_subnet.private_subnet_3.id
+    #subnet_id                   = aws_subnet.private_subnet_3.id
     security_groups             = [aws_security_group.business_logic_layer_sg_availability_zone_2.id]
   }
 
