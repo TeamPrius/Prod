@@ -2,9 +2,9 @@
 
 #  autoscaling group
 resource "aws_autoscaling_group" "autoscaling_group_availability_zone_2" {
-  desired_capacity    = 2  # desired number of instances at a given time
-  max_size            = 5  # maximum number of instances group should have
-  min_size            = 2  # minimum number of instances group should have
+  desired_capacity    = 2 # desired number of instances at a given time
+  max_size            = 5 # maximum number of instances group should have
+  min_size            = 2 # minimum number of instances group should have
   vpc_zone_identifier = [aws_subnet.private_subnet_1.id, aws_subnet.private_subnet_3.id]
   target_group_arns   = [aws_lb_target_group.prod_vpclb_target_group.arn]
 
@@ -18,7 +18,7 @@ resource "aws_autoscaling_group" "autoscaling_group_availability_zone_2" {
 # launch template or launch configuration
 resource "aws_launch_template" "launch_template_availability_zone_2" {
   name          = "launch-template-availability-zone-2"
-  image_id      = data.aws_ami.amazonlinux2023.id 
+  image_id      = data.aws_ami.amazonlinux2023.id
   instance_type = "t2.micro"
   user_data     = filebase64("./userdata.sh")
 
@@ -32,8 +32,13 @@ resource "aws_launch_template" "launch_template_availability_zone_2" {
 
   network_interfaces {
     associate_public_ip_address = false
+<<<<<<< HEAD
     subnet_id                   = aws_subnet.private_subnet_3.id
     security_groups             = [aws_security_group.business_logic_layer_sg_availability_zone_2.id]
+=======
+    #subnet_id                   = aws_subnet.private_subnet_3.id
+    security_groups = [aws_security_group.business_logic_layer_sg_availability_zone_2.id]
+>>>>>>> e923f4cd65d1312745e5a5550d4ee1366beb991f
   }
 
   tag_specifications {
