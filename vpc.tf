@@ -1,7 +1,7 @@
 # create VPC
 
 resource "aws_vpc" "prod_vpc" {
-  cidr_block = "10.0.0.0/16"  # cidr block of vpc
+  cidr_block           = "10.0.0.0/16" # cidr block of vpc
   enable_dns_hostnames = true
 
   tags = {
@@ -16,9 +16,9 @@ resource "aws_vpc" "prod_vpc" {
 # create public subnet 1 for Jump Tier
 
 resource "aws_subnet" "public_subnet_1" {
-  vpc_id                  = aws_vpc.prod_vpc.id  # get vpc id
-  cidr_block              = "10.0.1.0/24"        # cidr block of public subnet 1
-  availability_zone       = "us-east-1a"         # availability zone of public subnet 1
+  vpc_id                  = aws_vpc.prod_vpc.id # get vpc id
+  cidr_block              = "10.0.1.0/24"       # cidr block of public subnet 1
+  availability_zone       = "us-east-1a"        # availability zone of public subnet 1
   map_public_ip_on_launch = true
 
   tags = {
@@ -30,9 +30,9 @@ resource "aws_subnet" "public_subnet_1" {
 # create private subnet 1 for Business Logic Layer
 
 resource "aws_subnet" "private_subnet_1" {
-  vpc_id                  = aws_vpc.prod_vpc.id  # get vpc id
-  cidr_block              = "10.0.2.0/24"        # cidr block of private subnet 1
-  availability_zone       = "us-east-1a"         # availability zone of private subnet 1
+  vpc_id                  = aws_vpc.prod_vpc.id # get vpc id
+  cidr_block              = "10.0.2.0/24"       # cidr block of private subnet 1
+  availability_zone       = "us-east-1a"        # availability zone of private subnet 1
   map_public_ip_on_launch = false
 
   tags = {
@@ -44,9 +44,9 @@ resource "aws_subnet" "private_subnet_1" {
 # create private subnet 2 for Data Storage Layer
 
 resource "aws_subnet" "private_subnet_2" {
-  vpc_id                  = aws_vpc.prod_vpc.id  # get vpc id
-  cidr_block              = "10.0.3.0/24"        # cidr block of private subnet 2
-  availability_zone       = "us-east-1a"         # availability zone of private subnet 2
+  vpc_id                  = aws_vpc.prod_vpc.id # get vpc id
+  cidr_block              = "10.0.3.0/24"       # cidr block of private subnet 2
+  availability_zone       = "us-east-1a"        # availability zone of private subnet 2
   map_public_ip_on_launch = false
 
   tags = {
@@ -62,9 +62,9 @@ resource "aws_subnet" "private_subnet_2" {
 # create public subnet 2 for Jump Tier
 
 resource "aws_subnet" "public_subnet_2" {
-  vpc_id                  = aws_vpc.prod_vpc.id    # get vpc id
-  cidr_block              = "10.0.4.0/24"          # cidr block of public subnet 2
-  availability_zone       = "us-east-1b"           # availability zone of public subnet 2
+  vpc_id                  = aws_vpc.prod_vpc.id # get vpc id
+  cidr_block              = "10.0.4.0/24"       # cidr block of public subnet 2
+  availability_zone       = "us-east-1b"        # availability zone of public subnet 2
   map_public_ip_on_launch = true
 
   tags = {
@@ -76,9 +76,9 @@ resource "aws_subnet" "public_subnet_2" {
 # create private subnet 3 for Business Logic Layer
 
 resource "aws_subnet" "private_subnet_3" {
-  vpc_id                  = aws_vpc.prod_vpc.id  # get vpc id
-  cidr_block              = "10.0.5.0/24"        # cidr block of private subnet 3
-  availability_zone       = "us-east-1b"         # availability zone of private subnet 3
+  vpc_id                  = aws_vpc.prod_vpc.id # get vpc id
+  cidr_block              = "10.0.5.0/24"       # cidr block of private subnet 3
+  availability_zone       = "us-east-1b"        # availability zone of private subnet 3
   map_public_ip_on_launch = false
 
   tags = {
@@ -90,9 +90,9 @@ resource "aws_subnet" "private_subnet_3" {
 # create private subnet 4 for Data Storage Layer
 
 resource "aws_subnet" "private_subnet_4" {
-  vpc_id                  = aws_vpc.prod_vpc.id  # get vpc id
-  cidr_block              = "10.0.6.0/24"        # cidr block of private subnet 4
-  availability_zone       = "us-east-1b"         # availability zone of private subnet 4
+  vpc_id                  = aws_vpc.prod_vpc.id # get vpc id
+  cidr_block              = "10.0.6.0/24"       # cidr block of private subnet 4
+  availability_zone       = "us-east-1b"        # availability zone of private subnet 4
   map_public_ip_on_launch = false
 
   tags = {

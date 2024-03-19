@@ -17,7 +17,7 @@ resource "aws_route_table" "publicroute1" {
 
 
 resource "aws_route_table_association" "publicrta1" {
-  subnet_id      = aws_subnet.public1.id
+  subnet_id      = aws_subnet.public_subnet_1.id
   route_table_id = aws_route_table.publicroute1.id
 }
 
@@ -76,7 +76,7 @@ resource "aws_route_table" "pvtroute1" {
 
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat.id
+    nat_gateway_id = aws_nat_gateway.nat_gw_availability_zone_1.id
   }
 
 
@@ -89,7 +89,7 @@ resource "aws_route_table" "pvtroute1" {
 
 
 resource "aws_route_table_association" "pvtrta1" {
-  subnet_id      = aws_subnet.private1.id
+  subnet_id      = aws_subnet.private_subnet_1.id
   route_table_id = aws_route_table.pvtroute1.id
 }
 
@@ -106,7 +106,7 @@ resource "aws_route_table" "pvtroute2" {
 
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat.id
+    nat_gateway_id = aws_nat_gateway.nat_gw_availability_zone_1.id
   }
 
 
@@ -120,7 +120,7 @@ resource "aws_route_table" "pvtroute2" {
 
 
 resource "aws_route_table_association" "pvtrta2" {
-  subnet_id      = aws_subnet.private2.id
+  subnet_id      = aws_subnet.private_subnet_2.id
   route_table_id = aws_route_table.pvtroute2.id
 }
 
