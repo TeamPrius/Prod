@@ -61,7 +61,6 @@ resource "aws_route_table" "bus_log_layer_rt" {
 }
 
 
-<<<<<<< HEAD
 # create public route table association
 resource "aws_route_table_association" "bus_log_layer_rta_availability_zone_1" {
   subnet_id      = aws_subnet.private_subnet_1.id
@@ -71,11 +70,10 @@ resource "aws_route_table_association" "bus_log_layer_rta_availability_zone_1" {
 
 # create public route table association
 resource "aws_route_table_association" "bus_log_layer_rta_availability_zone_2" {
-=======
+
 # create private route table association for Private Subnet 3
 
 resource "aws_route_table_association" "bus_log_layer_rta" {
->>>>>>> e923f4cd65d1312745e5a5550d4ee1366beb991f
   subnet_id      = aws_subnet.private_subnet_3.id
   route_table_id = aws_route_table.bus_log_layer_rt.id
 }
