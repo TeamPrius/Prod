@@ -34,7 +34,6 @@ resource "aws_launch_template" "launch_template_availability_zone_2" {
     associate_public_ip_address = false
     subnet_id                   = aws_subnet.private_subnet_1.id
     security_groups             = [aws_security_group.business_logic_layer_sg_availability_zone_2.id]
-    security_groups             = [aws_security_group.business_logic_layer_sg.id]
   }
 
   tag_specifications {

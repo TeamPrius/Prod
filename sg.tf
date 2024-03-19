@@ -102,6 +102,9 @@ resource "aws_vpc_security_group_ingress_rule" "business_logic_layer_ingr_availa
   cidr_ipv4 = "0.0.0.0/0"  # access from any ip address
   from_port = 22  # http -> port 80
   to_port = 22  # http -> port 80
+  ip_protocol = "tcp"
+  from_port         = 80
+  to_port           = 80
   ip_protocol       = "tcp"
 }
 
