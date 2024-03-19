@@ -18,7 +18,7 @@ resource "aws_security_group" "appsg" {
 }
 
 #Inbound rule
-resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
+resource "aws_vpc_security_group_ingress_rule" "allow_http" {
   security_group_id = aws_security_group.appsg.id
   cidr_ipv4         = "0.0.0.0/0" 
   from_port         = 80
