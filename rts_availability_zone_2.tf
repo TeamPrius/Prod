@@ -24,13 +24,20 @@ resource "aws_route_table" "bus_log_layer_rt" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.prod_vpcigw.id
+    nat_gateway_id = aws_nat_gateway.nat_gw_availability_zone_1.id
   }
 }
 
 
 # create public route table association
-resource "aws_route_table_association" "bus_log_layer_rta" {
+resource "aws_route_table_association" "bus_log_layer_rta_availability_zone_1" {
+  subnet_id      = aws_subnet.private_subnet_1.id
+  route_table_id = aws_route_table.bus_log_layer_rt.id
+}
+
+
+# create public route table association
+resource "aws_route_table_association" "bus_log_layer_rta_availability_zone_2" {
   subnet_id      = aws_subnet.private_subnet_3.id
   route_table_id = aws_route_table.bus_log_layer_rt.id
 }

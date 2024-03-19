@@ -6,6 +6,7 @@ resource "aws_eip" "eip_availability_zone_1" {
     aws_route_table_association.pres_layer_rta
   ]
   vpc        = true
+  associate_with_private_ip = "10.0.0.6"
 }
 
 
@@ -16,6 +17,7 @@ resource "aws_eip" "eip_availability_zone_2" {
     aws_route_table_association.pres_layer_rta
   ]
   vpc        = true
+  associate_with_private_ip = "10.0.0.7"
 }
 
 

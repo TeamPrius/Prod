@@ -9,6 +9,8 @@ resource "aws_nat_gateway" "nat_gw_availability_zone_1" {
   tags = {
     Name = "nat gateway availability zone 1"
   }
+
+  depends_on = [aws_eip.eip_availability_zone_1]
 }
 
 
@@ -23,4 +25,6 @@ resource "aws_nat_gateway" "nat_gw_availability_zone_2" {
   tags = {
     Name = "nat gateway availability zone 2"
   }
+
+  depends_on = [aws_eip.eip_availability_zone_2]
 }
