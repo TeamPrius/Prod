@@ -5,7 +5,7 @@
 resource "aws_db_instance" "rds_instance" {
   allocated_storage = 5 # Storage for instance in gigabytes
   db_name           = "rds_availability_zone_1"
-  availability_zone    = "us-east-1a" 
+  #availability_zone    = "us-east-1a" 
   engine            = "mysql"
   engine_version    = "5.7"
   instance_class    = "db.t2.micro"

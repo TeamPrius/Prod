@@ -26,6 +26,14 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http" {
   to_port           = 80
 }
 
+resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
+  security_group_id = aws_security_group.appsg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 22
+  ip_protocol       = "tcp"
+  to_port           = 22
+}
+
 
 #Outbound rule
 resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
@@ -75,8 +83,8 @@ resource "aws_vpc_security_group_egress_rule" "presentation_layer_egr_availabili
 
 
 # security group for Business Logic Layer
-resource "aws_security_group" "business_logic_layer_sg_availability_zone_2" {
-  name        = "Bus-Log-Layer-SG-Availability-Zone-2"
+resource "aws_security_group" "business_logic_layer_sg" {
+  name        = "business-logic-sg"
   description = "Security group for Business Logic Layer of availability zone 2"
   vpc_id      = aws_vpc.prod_vpc.id
 
@@ -89,29 +97,26 @@ resource "aws_security_group" "business_logic_layer_sg_availability_zone_2" {
 # incoming rules
 
 
-resource "aws_vpc_security_group_ingress_rule" "business_logic_layer_ingr_availability_zone_2" {
-  security_group_id = aws_security_group.business_logic_layer_sg_availability_zone_2.id
+resource "aws_vpc_security_group_ingress_rule" "business_logic_layer_sg_ingr" {
+  security_group_id = aws_security_group.business_logic_layer_sg.id
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol = "-1"
 }
 
 
 # ssh
-resource "aws_vpc_security_group_ingress_rule" "business_logic_layer_ingr_availability_zone_2" {
-  security_group_id = aws_security_group.business_logic_layer_sg_availability_zone_2.id
+resource "aws_vpc_security_group_ingress_rule" "business_logic_layer_sg_ingr_ssh" {
+  security_group_id = aws_security_group.business_logic_layer_sg.id
   cidr_ipv4 = "0.0.0.0/0"  # access from any ip address
-  from_port = 22  # http -> port 80
-  to_port = 22  # http -> port 80
+  from_port = 22
+  to_port = 22
   ip_protocol = "tcp"
-  from_port         = 80
-  to_port           = 80
-  ip_protocol       = "tcp"
 }
 
 
 # outgoing rules
-resource "aws_vpc_security_group_egress_rule" "business_logic_layer_egr_availability_zone_2" {
-  security_group_id = aws_security_group.business_logic_layer_sg_availability_zone_2.id
+resource "aws_vpc_security_group_egress_rule" "business_logic_layer_sg_egr" {
+  security_group_id = aws_security_group.business_logic_layer_sg.id
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1"
 }
@@ -168,7 +173,7 @@ resource "aws_vpc_security_group_ingress_rule" "data_storage_layer_ingr_availabi
   from_port                    = 3306
   to_port                      = 3306
   ip_protocol                  = "tcp"
-  referenced_security_group_id = aws_security_group.business_logic_layer_sg_availability_zone_2.id
+  referenced_security_group_id = aws_security_group.business_logic_layer_sg.id
 }
 
 

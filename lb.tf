@@ -5,7 +5,7 @@ resource "aws_lb" "prod_vpclb" {
   load_balancer_type = "application"
   security_groups    = [aws_security_group.lb_sg.id]
   subnets            = [aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id]
-  depends_on         = [aws_nat_gateway.nat_gw_availability_zone_2]
+  depends_on         = [aws_nat_gateway.nat_gw_availability_zone_1]
 }
 
 

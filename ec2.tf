@@ -51,7 +51,7 @@ resource "aws_instance" "business_logic_tier_availability_zone_1" {
   subnet_id                   = aws_subnet.private_subnet_1.id  # get subnet id
   availability_zone           = "us-east-1a"                    # get availability zone
   associate_public_ip_address = false                           #Made this change because instance is in Private subnet                                                                  # gives public ip address
-  vpc_security_group_ids      = [aws_security_group.appsg.id]   # get security group id
+  vpc_security_group_ids      = [aws_security_group.business_logic_layer_sg.id]   # get security group id
 
   user_data = filebase64("./userdata.sh")
   metadata_options {
@@ -74,7 +74,7 @@ resource "aws_instance" "business_logic_tier_availability_zone_2" {
   subnet_id                   = aws_subnet.private_subnet_3.id                                      # get public subnet id
   availability_zone           = "us-east-1b"                                                        # get availability zone
   associate_public_ip_address = false                                                               # gives public ip address
-  vpc_security_group_ids      = [aws_security_group.business_logic_layer_sg_availability_zone_2.id] # get security group id
+  vpc_security_group_ids      = [aws_security_group.business_logic_layer_sg.id] # get security group id
 
   user_data = filebase64("./userdata.sh")
   metadata_options {

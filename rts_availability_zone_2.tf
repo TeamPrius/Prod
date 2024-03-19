@@ -77,27 +77,27 @@ resource "aws_route_table_association" "bus_log_layer_rta" {
 
 # Business Logic Layer Private Route Table For Private Subnet 1
 
-resource "aws_route_table" "pvtroute1" {
-  vpc_id = aws_vpc.prod_vpc.id
-
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat_gw_availability_zone_1.id
-  }
-
-
-  tags = {
-    Name = "PrivateRouteTable1"
-  }
-}
-
-#Create Private Route table1 association
-
-
-resource "aws_route_table_association" "pvtrta1" {
-  subnet_id      = aws_subnet.private_subnet_1.id
-  route_table_id = aws_route_table.pvtroute1.id
-}
+#resource "aws_route_table" "pvtroute1" {
+#  vpc_id = aws_vpc.prod_vpc.id
+#
+#  route {
+#    cidr_block     = "0.0.0.0/0"
+#    nat_gateway_id = aws_nat_gateway.nat_gw_availability_zone_1.id
+#  }
+#
+#
+#  tags = {
+#    Name = "PrivateRouteTable1"
+#  }
+#}
+#
+##Create Private Route table1 association
+#
+#
+#resource "aws_route_table_association" "pvtrta1" {
+#  subnet_id      = aws_subnet.private_subnet_1.id
+#  route_table_id = aws_route_table.pvtroute1.id
+#}
 
 
 ###########################################################################################
