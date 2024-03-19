@@ -18,9 +18,9 @@ resource "aws_security_group" "appsg" {
 }
 
 #Inbound rule
-resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
+resource "aws_vpc_security_group_ingress_rule" "allow_http" {
   security_group_id = aws_security_group.appsg.id
-  cidr_ipv4         = "0.0.0.0/0" 
+  cidr_ipv4         = "0.0.0.0/0"
   from_port         = 80
   ip_protocol       = "tcp"
   to_port           = 80
@@ -56,7 +56,7 @@ resource "aws_security_group" "presentation_layer_sg_availability_zone_2" {
 # allow http access from internet
 resource "aws_vpc_security_group_ingress_rule" "presentation_layer_ingr_availability_zone_2" {
   security_group_id = aws_security_group.presentation_layer_sg_availability_zone_2.id
-  cidr_ipv4         = "0.0.0.0/0" 
+  cidr_ipv4         = "0.0.0.0/0"
   from_port         = 80
   to_port           = 80
   ip_protocol       = "tcp"
@@ -92,6 +92,7 @@ resource "aws_security_group" "business_logic_layer_sg_availability_zone_2" {
 resource "aws_vpc_security_group_ingress_rule" "business_logic_layer_ingr_availability_zone_2" {
   security_group_id = aws_security_group.business_logic_layer_sg_availability_zone_2.id
   cidr_ipv4         = "0.0.0.0/0"
+<<<<<<< HEAD
   ip_protocol = "-1"
 }
 
@@ -103,6 +104,11 @@ resource "aws_vpc_security_group_ingress_rule" "business_logic_layer_ingr_availa
   from_port = 22  # http -> port 80
   to_port = 22  # http -> port 80
   ip_protocol = "tcp"
+=======
+  from_port         = 80
+  to_port           = 80
+  ip_protocol       = "tcp"
+>>>>>>> e923f4cd65d1312745e5a5550d4ee1366beb991f
 }
 
 
@@ -131,13 +137,13 @@ resource "aws_security_group" "rds_sg" {
 
 # Allow inbound MySQL connections
 resource "aws_security_group_rule" "allow_mysql_in" {
-  description              = "Allow inbound MySQL connections"
-  type                     = "ingress"
-  from_port                = "3306"
-  to_port                  = "3306"
-  protocol                 = "tcp"
-  cidr_blocks              = ["10.0.2.0/24", "10.0.5.0/24"]
-  security_group_id        = aws_security_group.rds_sg.id
+  description       = "Allow inbound MySQL connections"
+  type              = "ingress"
+  from_port         = "3306"
+  to_port           = "3306"
+  protocol          = "tcp"
+  cidr_blocks       = ["10.0.2.0/24", "10.0.5.0/24"]
+  security_group_id = aws_security_group.rds_sg.id
 }
 
 
@@ -162,7 +168,7 @@ resource "aws_security_group" "data_storage_layer_sg_availability_zone_2" {
 # allow mysql access
 resource "aws_vpc_security_group_ingress_rule" "data_storage_layer_ingr_availability_zone_2" {
   security_group_id            = aws_security_group.data_storage_layer_sg_availability_zone_2.id
-  from_port                    = 3306 
+  from_port                    = 3306
   to_port                      = 3306
   ip_protocol                  = "tcp"
   referenced_security_group_id = aws_security_group.business_logic_layer_sg_availability_zone_2.id
@@ -196,9 +202,9 @@ resource "aws_security_group" "lb_sg" {
 resource "aws_vpc_security_group_ingress_rule" "lb_sg_ingr" {
   security_group_id = aws_security_group.lb_sg.id
   cidr_ipv4         = "0.0.0.0/0"
-  from_port = 80  
-  to_port = 80
-  ip_protocol = "tcp"
+  from_port         = 80
+  to_port           = 80
+  ip_protocol       = "tcp"
 }
 
 
