@@ -92,7 +92,6 @@ resource "aws_security_group" "business_logic_layer_sg_availability_zone_2" {
 resource "aws_vpc_security_group_ingress_rule" "business_logic_layer_ingr_availability_zone_2" {
   security_group_id = aws_security_group.business_logic_layer_sg_availability_zone_2.id
   cidr_ipv4         = "0.0.0.0/0"
-<<<<<<< HEAD
   ip_protocol = "-1"
 }
 
@@ -103,12 +102,7 @@ resource "aws_vpc_security_group_ingress_rule" "business_logic_layer_ingr_availa
   cidr_ipv4 = "0.0.0.0/0"  # access from any ip address
   from_port = 22  # http -> port 80
   to_port = 22  # http -> port 80
-  ip_protocol = "tcp"
-=======
-  from_port         = 80
-  to_port           = 80
   ip_protocol       = "tcp"
->>>>>>> e923f4cd65d1312745e5a5550d4ee1366beb991f
 }
 
 

@@ -9,8 +9,8 @@ resource "aws_autoscaling_group" "autoscaling_group_availability_zone_2" {
   target_group_arns   = [aws_lb_target_group.prod_vpclb_target_group.arn]
 
   launch_template {
-    id      = aws_launch_template.launch_template_availability_zone_2.id
-    version = aws_launch_template.launch_template_availability_zone_2.latest_version
+    id      = aws_launch_template.launch_template.id
+    version = aws_launch_template.launch_template.latest_version
   }
 }
 
@@ -32,10 +32,9 @@ resource "aws_launch_template" "launch_template_availability_zone_2" {
 
   network_interfaces {
     associate_public_ip_address = false
-    subnet_id                   = aws_subnet.private_subnet_3.id
+    subnet_id                   = aws_subnet.private_subnet_1.id
     security_groups             = [aws_security_group.business_logic_layer_sg_availability_zone_2.id]
-    #subnet_id                   = aws_subnet.private_subnet_3.id
-    security_groups = [aws_security_group.business_logic_layer_sg_availability_zone_2.id]
+    security_groups             = [aws_security_group.business_logic_layer_sg.id]
   }
 
   tag_specifications {

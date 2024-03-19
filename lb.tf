@@ -23,6 +23,8 @@ resource "aws_lb_listener" "prod_vpclb_listener" {
   load_balancer_arn = aws_lb.prod_vpclb.arn
   port              = 80
   protocol          = "HTTP"
+  depends_on        = [aws_lb_target_group.prod_vpclb_target_group]
+
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.prod_vpclb_target_group.arn
