@@ -1,6 +1,6 @@
 # create EC2 instances
 
-# Presentation Layer
+# EC2 instances for Presentation Layer
 
 
 # Availability Zone 1
@@ -39,7 +39,7 @@ resource "aws_instance" "jump_tier_availability_zone_2" {
 ###########################################################################################
 
 
-# Business Logic Layer (we use launch templates to accomodate ebs volumes and autoscaling)
+# Business Logic Layer (we use launch templates to accommodate ebs volumes and autoscaling)
 
 
 # Availability Zone 1
@@ -50,7 +50,7 @@ resource "aws_instance" "business_logic_tier_availability_zone_1" {
   instance_type               = "t2.micro"                                                             # ami instance type
   subnet_id                   = aws_subnet.private_subnet_1.id                                         # get subnet id
   availability_zone           = "us-east-1a"                                                           # get availability zone
-  associate_public_ip_address = true                                                                   # gives public ip address
+  associate_public_ip_address = false       #Made this change because instance is in Private subnet                                                                  # gives public ip address
   vpc_security_group_ids      = [aws_security_group.appsg.id]    # get security group id
 
   user_data                   = filebase64("./userdata.sh") 
@@ -73,7 +73,7 @@ resource "aws_instance" "business_logic_tier_availability_zone_2" {
   instance_type               = "t2.micro"                                                             # ami instance type
   subnet_id                   = aws_subnet.private_subnet_3.id                                         # get public subnet id
   availability_zone           = "us-east-1b"                                                           # get availability zone
-  associate_public_ip_address = true                                                                   # gives public ip address
+  associate_public_ip_address = false                                                               # gives public ip address
   vpc_security_group_ids      = [aws_security_group.business_logic_layer_sg_availability_zone_2.id]    # get security group id
 
   user_data                   = filebase64("./userdata.sh") 
